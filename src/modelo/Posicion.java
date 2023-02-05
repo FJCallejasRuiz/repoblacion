@@ -34,9 +34,6 @@ public class Posicion {
 	}
 
 	private void setX(double x) {
-		if (x < 0) {
-			throw new IllegalArgumentException("ERROR: No se puede un valor negativo.");
-		}
 		this.x = x;
 	}
 
@@ -45,9 +42,7 @@ public class Posicion {
 	}
 
 	private void setY(double y) {
-		if (y < 0) {
-			throw new IllegalArgumentException("ERROR: No se puede un valor negativo.");
-		}
+	
 		this.y = y;
 	}
 
