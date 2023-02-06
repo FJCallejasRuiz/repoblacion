@@ -38,6 +38,7 @@ public class Bosque {
 		Especie[] especie_placebo = Especie.values();
 		Especie especieAMostrar= null;
 		int tamaño = especie_placebo.length;
+		int tamañoMax = max_especies.length;
 		int especieAleatoria = 0;
 
 		boolean bandera = false;
@@ -50,16 +51,21 @@ public class Bosque {
 				Posicion posicionDefinitiva = new Posicion(posicionAleatoria());
 
 				if (i == 0) {
-					especieAleatoria = new Random().nextInt(tamaño - 1);
+					especieAleatoria = new Random().nextInt((tamaño) - 1);
 					especieAMostrar = especie_placebo[especieAleatoria];
+				}else {
+					especieAleatoria = new Random().nextInt((tamaño) - 1);
+					especieAMostrar = especie_placebo[especieAleatoria];
+					while ((especieAMostrar.equals(Especie.ALAMO) && ((arboles[i - 1].getEspecie().equals(Especie.CASTANO))
+							|| (arboles[i - 1].getEspecie().equals(Especie.CIPRES))
+							|| (arboles[i - 1].getEspecie().equals(Especie.OLIVO))))
+							|| (especieAMostrar.equals(Especie.OLIVO) && (arboles[i - 1].getEspecie().equals(Especie.ALAMO)
+									|| arboles[i - 1].getEspecie().equals(Especie.ENCINA)))) {
+						especieAleatoria = new Random().nextInt((tamaño) - 1);
+						especieAMostrar = especie_placebo[especieAleatoria];
+					}
 				}
-				while (especieAMostrar.equals(Especie.ALAMO) && ((arboles[i - 1].getEspecie().equals(Especie.CASTANO))
-						|| (arboles[i - 1].getEspecie().equals(Especie.CIPRES))
-						|| (arboles[i - 1].getEspecie().equals(Especie.OLIVO)))) {
-
-					especieAleatoria = new Random().nextInt(tamaño - 1);
-					especieAMostrar = max_especies[especieAleatoria];
-				}
+				
 				arboles[i] = new Arbol(especieAMostrar, posicionDefinitiva);
 				if (i == 0) {
 					max_especies[0] = arboles[0].getEspecie();
@@ -90,22 +96,23 @@ public class Bosque {
 			} else {
 				Posicion posicionDefinitiva = new Posicion(posicionAleatoria());
 
-				especieAleatoria = new Random().nextInt(tamaño - 1);
-				especieAMostrar = especie_placebo[especieAleatoria];
+				especieAleatoria = new Random().nextInt((tamañoMax) - 1);
+				especieAMostrar = max_especies[especieAleatoria];
 
 				while ((especieAMostrar.equals(Especie.ALAMO) && ((arboles[i - 1].getEspecie().equals(Especie.CASTANO))
 						|| (arboles[i - 1].getEspecie().equals(Especie.CIPRES))
 						|| (arboles[i - 1].getEspecie().equals(Especie.OLIVO))))
 						|| (especieAMostrar.equals(Especie.OLIVO) && (arboles[i - 1].getEspecie().equals(Especie.ALAMO)
 								|| arboles[i - 1].getEspecie().equals(Especie.ENCINA)))) {
-					especieAleatoria = new Random().nextInt(tamaño - 1);
+					especieAleatoria = new Random().nextInt((tamañoMax) - 1);
 					especieAMostrar = max_especies[especieAleatoria];
 				}
 				arboles[i] = new Arbol(especieAMostrar, posicionDefinitiva);
 
 			}
-
+		 
 		}
+		
 	}
 
 	private Posicion posicionAleatoria() {
@@ -118,6 +125,7 @@ public class Bosque {
 	public void realizarCalculos() {
 		Posicion centro = new Posicion(0, 0);
 		boolean primero = false;
+		
 		for (int i = 0; i < this.arboles.length; i++) {
 			if (arboles[i] == null) {
 				throw new NullPointerException("ERROR: arbol nulo");
@@ -128,15 +136,18 @@ public class Bosque {
 				arbolMasCentrado = new Arbol(arboles[i]);
 				primero = true;
 
-			}
-			if (arboles[i].getPosicion().distancia(centro) > arbolMasAlejado.getPosicion().distancia(centro)) {
-				arbolMasAlejado = new Arbol(arboles[i]);
+			}else {
+				if (arboles[i].getPosicion().distancia(centro) > arbolMasAlejado.getPosicion().distancia(centro)) {
+					arbolMasAlejado = new Arbol(arboles[i]);
 
-			}
-			if (arboles[i].getPosicion().distancia(centro) < arbolMasCentrado.getPosicion().distancia(centro)) {
-				arbolMasCentrado = new Arbol(arboles[i]);
+				}
+				if (arboles[i].getPosicion().distancia(centro) < arbolMasCentrado.getPosicion().distancia(centro)) {
+					arbolMasCentrado = new Arbol(arboles[i]);
 
+				}
 			}
+			
+			
 
 		}
 	}
@@ -184,7 +195,12 @@ public class Bosque {
 
 	@Override
 	public String toString() {
+		for (Arbol arbol: arboles) {
+			System.out.println(arbol);
+		}
+		System.out.println("------------------------------------------------------------------------------------s");
 		return "Bosque [arbolMasAlejado=" + arbolMasAlejado + ", arbolMasCentrado=" + arbolMasCentrado + "]";
+		
 	}
 
 }
